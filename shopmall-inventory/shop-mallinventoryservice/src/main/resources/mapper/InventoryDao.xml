@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgc.shopmall.inventory.dao.InventoryDao" >
+  <resultMap id="BaseResultMap" type="com.wgc.shopmall.inventory.entity.Inventory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="stock_qty" property="stockQty" jdbcType="INTEGER" />
+    <result column="locked_qty" property="lockedQty" jdbcType="INTEGER" />
+    <result column="frozen_qty" property="frozenQty" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_code, item_name, stock_qty, locked_qty, frozen_qty, create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_inventory
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByCode" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"> </include> from t_inventory
+        <where>
+          <if test="itemCode != null">
+            item_code = #{paramMap.itemCode}
+          </if>
+        </where>
+
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_inventory
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wgc.shopmall.inventory.entity.Inventory" >
+    insert into t_inventory (id, item_code, item_name, 
+      stock_qty, locked_qty, frozen_qty, 
+      create_time, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{stockQty,jdbcType=INTEGER}, #{lockedQty,jdbcType=INTEGER}, #{frozenQty,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wgc.shopmall.inventory.entity.Inventory" >
+    insert into t_inventory
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="stockQty != null" >
+        stock_qty,
+      </if>
+      <if test="lockedQty != null" >
+        locked_qty,
+      </if>
+      <if test="frozenQty != null" >
+        frozen_qty,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockQty != null" >
+        #{stockQty,jdbcType=INTEGER},
+      </if>
+      <if test="lockedQty != null" >
+        #{lockedQty,jdbcType=INTEGER},
+      </if>
+      <if test="frozenQty != null" >
+        #{frozenQty,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wgc.shopmall.inventory.entity.Inventory" >
+    update t_inventory
+    <set >
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockQty != null" >
+        stock_qty = #{stockQty,jdbcType=INTEGER},
+      </if>
+      <if test="lockedQty != null" >
+        locked_qty = #{lockedQty,jdbcType=INTEGER},
+      </if>
+      <if test="frozenQty != null" >
+        frozen_qty = #{frozenQty,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wgc.shopmall.inventory.entity.Inventory" >
+    update t_inventory
+    set item_code = #{itemCode,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      stock_qty = #{stockQty,jdbcType=INTEGER},
+      locked_qty = #{lockedQty,jdbcType=INTEGER},
+      frozen_qty = #{frozenQty,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByItemCode" parameterType="com.wgc.shopmall.inventory.entity.Inventory">
+    update t_inventory
+    <set>
+      <if test="stockQty != null" >
+        stock_qty = case when stock_qty + #{stockQty} >0 then stock_qty + #{stockQty} else 0 end,
+      </if>
+      <if test="lockedQty != null" >
+        locked_qty = case when locked_qty + #{lockedQty} >0 then locked_qty + #{lockedQty} ELSE 0 END ,
+      </if>
+      <if test="frozenQty != null" >
+        frozen_qty = case when frozen_qty + #{frozenQty}>0 then frozen_qty + #{frozenQty} else 0 end,
+      </if>
+    </set>
+    <where>
+      item_code = #{itemCode}
+    </where>
+  </update>
+
+</mapper>
