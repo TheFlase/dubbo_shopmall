@@ -5,6 +5,7 @@ import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @Author wgc
@@ -15,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableDubbo
 @MapperScan("com.wgc.shopmall.item.dao")
 @DubboComponentScan("com.wgc.shopmall.item.service")
+@ComponentScan("com.wgc.shopmall.item.controller")
 public class MallShopItemStart {
     public static void main(String[] args) {
         SpringApplication.run(MallShopItemStart.class, args);
