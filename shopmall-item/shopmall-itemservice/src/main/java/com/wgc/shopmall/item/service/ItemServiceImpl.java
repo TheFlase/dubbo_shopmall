@@ -16,7 +16,7 @@ import java.util.Set;
  * @Date 3/27/2020
  **/
 @Service
-@Component
+@org.springframework.stereotype.Service
 public class ItemServiceImpl implements IItemService {
     @Resource
     private ItemDao itemDao;

@@ -2,6 +2,8 @@
 <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
+
+
 	<!-- Appenders -->
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
@@ -13,7 +15,7 @@
 
 	<appender name="filelog_appender" class="org.apache.log4j.RollingFileAppender">
 		<!-- 设置File参数：日志输出文件名 -->
-		<param name="File" value="D:/temp_logfile_dir/item-bizreg.log" />
+		<param name="File" value="D:/temp_logfile_dir/common-bizreg.log" />
 		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
 		<param name="Append" value="true" />
 		<!-- 设置文件大小 -->
@@ -29,7 +31,7 @@
 
 	<!-- 输出到日志文件 每天一个日志 -->
 	<appender name="filelog_daily" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="D:/temp_logfile_dir/item-bizreg_daily.log" />
+		<param name="File" value="D:/temp_logfile_dir/common-bizreg_daily.log" />
 		<param name="DatePattern" value="'daily.'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
@@ -49,7 +51,7 @@
 	</appender>
 
 	<!-- Application Loggers -->
-	<logger name="com.wgc.shopmall.item">
+	<logger name="com.wgc.shopmall.common">
 		<level value="${APP_LOG_LEVEL}"/>
 	</logger>
 	<logger name="org.mybatis" additivity="true">
@@ -86,7 +88,7 @@
 		<level value="info" />
 	</logger>
 	<logger name="com.alibaba.dubbo">
-		<level value="info" />
+		<level value="error" />
 	</logger>
 
 	<logger name="org.springframework.web">

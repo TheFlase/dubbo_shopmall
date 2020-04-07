@@ -1,4 +1,4 @@
-package start;
+package com.wgc.shopmall.order.start;
 
 import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
@@ -9,14 +9,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @Author wgc
  * @Description
- * @Date 3/30/2020
+ * @Date 4/5/2020
  **/
 @SpringBootApplication
 @EnableDubbo
-@MapperScan("com.wgc.shopmall.item.dao")
-@DubboComponentScan("com.wgc.shopmall.item.service")
-public class MallShopItemStart {
+@MapperScan("com.wgc.shopmall.order.dao")
+@DubboComponentScan("com.wgc.shopmall.order.service")
+public class ShopMallOrderStart {
     public static void main(String[] args) {
-        SpringApplication.run(MallShopItemStart.class, args);
+        SpringApplication.run(ShopMallOrderStart.class, args);
     }
 }
