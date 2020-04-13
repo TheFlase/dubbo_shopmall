@@ -2,6 +2,7 @@ package com.wgc.shopmall.order.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.wgc.shopmall.common.exception.BusinessException;
 import com.wgc.shopmall.common.utils.IdUtil;
 import com.wgc.shopmall.inventory.api.IInventoryService;
@@ -14,9 +15,15 @@ import com.wgc.shopmall.order.dao.OrderDao;
 import com.wgc.shopmall.order.entity.Order;
 import com.wgc.shopmall.order.entity.OrderDetail;
 import com.wgc.shopmall.order.param.OrderParam;
+import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +46,15 @@ public class OrderServiceImpl implements IOrderService {
     private IItemService itemService;
     @Reference
     private IInventoryService inventoryService;
+
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
+
+    @Value("${rocketmq.order.topic}")
+    private String orderTopic;
+    @Value("${rocketmq.producer.group}")
+    private String productMqGroup;
+
 
     @Override
     public int insert(Order record) {
@@ -98,5 +114,18 @@ public class OrderServiceImpl implements IOrderService {
         }
 
     }
+
+    @Override
+    public void saveOrderByMQ(OrderParam orderParam) throws RuntimeException {
+        Message msg = null;
+        try {
+            msg = MessageBuilder.withPayload(JSON.toJSONString(orderParam).getBytes(RemotingHelper.DEFAULT_CHARSET)).build();
+        } catch (UnsupportedEncodingException e) {
+            throw new BusinessException("创建订单,MQ序列化失败");
+        }
+        rocketMQTemplate.send(orderTopic,msg);
+//        rocketMQTemplate.sendMessageInTransaction(mqGroup, springTopic, msg, null);
+    }
+
 
 }

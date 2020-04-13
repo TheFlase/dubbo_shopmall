@@ -3,6 +3,8 @@ package com.wgc.shopmall.order.api;
 import com.wgc.shopmall.order.entity.Order;
 import com.wgc.shopmall.order.param.OrderParam;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * @Author wgc
  * @Description //TODO
@@ -16,4 +18,10 @@ public interface IOrderService {
      * @param orderParam
      */
     void saveAndSubtractInventory(OrderParam orderParam);
+
+    /**
+     * 通过MQ保存订单
+     * @param orderParam
+     */
+    void saveOrderByMQ(OrderParam orderParam) throws RuntimeException;
 }
