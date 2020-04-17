@@ -2,6 +2,7 @@ package com.wgc.shopmall.order.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 @Component
 public class RedisService {
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 默认过期时长，单位：秒
@@ -124,6 +125,21 @@ public class RedisService {
      */
     public void persistKey(String key) {
         redisTemplate.persist(key);
+    }
+
+    /**
+     * 将指定Key自增
+     * @param key
+     * @param liveTime
+     * @return
+     */
+    public long incr(String key,Long liveTime){
+        ValueOperations<String, Object> operations = redisTemplate.opsForValue();
+        Long aLong = operations.increment(key);
+        if(null != liveTime){
+            redisTemplate.expire(key,liveTime,TimeUnit.SECONDS);
+        }
+        return aLong;
     }
 
 

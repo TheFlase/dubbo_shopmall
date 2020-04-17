@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @Author wgc
- * @Description //TODO
+ * @Description
  * @Date 4/5/2020
  **/
 @SpringBootApplication(scanBasePackages = "com.wgc.shopmall.web")

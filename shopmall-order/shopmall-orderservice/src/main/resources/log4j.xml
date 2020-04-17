@@ -94,10 +94,6 @@
 		<level value="error" />
 	</logger>
 
-	<logger name="org.springframework.web">
-		<level value="info" />
-	</logger>
-
 	<logger name="java.sql">
 		<level value="info" />
 	</logger>
